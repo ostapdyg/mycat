@@ -1,39 +1,86 @@
-#include <iostream>
-#include <boost/program_options.hpp>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
 
 #include "operations/operations.hpp"
 
-int main(int argc, char **argv) {
-    int variable_a, variable_b;
+int my_read(int fd, void *buf, size_t count)
+{
 
-    namespace po = boost::program_options;
-
-    po::options_description visible("Supported options");
-    visible.add_options()
-            ("help,h", "Print this help message.");
-
-    po::options_description hidden("Hidden options");
-    hidden.add_options()
-            ("a", po::value<int>(&variable_a)->default_value(0), "Variable A.")
-            ("b", po::value<int>(&variable_b)->default_value(0), "Variable B.");
-
-    po::positional_options_description p;
-    p.add("a", 1);
-    p.add("b", 1);
-
-    po::options_description all("All options");
-    all.add(visible).add(hidden);
-
-    po::variables_map vm;
-    po::store(po::command_line_parser(argc, argv).options(all).positional(p).run(), vm);
-    po::notify(vm);
-
-    if (vm.count("help")) {
-        std::cout << "Usage:\n  add [a] [b]\n" << visible << std::endl;
-        return EXIT_SUCCESS;
+    while (count)
+    {
+        int res = read(fd, buf, count);
+        if (res == -1)
+        {
+            if (errno != EINTR)
+            {
+                return errno;
+            }
+        }
+        else
+        {
+            count -= res;
+            buf += res;
+        }
+        *(char *)(buf) = 0;
     }
+    return 0;
+}
 
-    int result = operations::add(variable_a, variable_b);
-    std::cout << result << std::endl;
-    return EXIT_SUCCESS;
+int my_write(int fd, const void *buf, size_t count)
+{
+    while (count)
+    {
+        int res = write(fd, buf, count);
+        if (res == -1)
+        {
+            if (errno != EINTR)
+            {
+                return errno;
+            }
+        }
+        else
+        {
+            count -= res;
+            buf += res;
+        }
+    }
+    return 0;
+}
+
+size_t my_strlen(const char* s){
+    const char* p;
+    for(p=s; *p !=0; p++);
+    // printf("Size: %d\n", (p-s));
+    return (p-s);
+}
+
+
+int my_print(int fd, const char* s){
+    return my_write(fd, s, my_strlen(s));
+}
+
+
+
+int main(int argc, char **argv)
+{
+    int input_file = open("samples/book1.txt", O_RDONLY);
+    // // // int output_file = open("stdout", O_WRONLY);
+    // // char *buf[100];
+    // // int res = my_read(input_file, buf, 5);
+    // // // buf[29] = 0;
+    // // res = my_write(STDIN_FILENO, buf, 5);
+    // // close(input_file);
+    // // // printf("%s\n", buf); 
+    // my_print(STDIN_FILENO, "Hello, world!\n");
+
+
+
+    return 0;
 }
