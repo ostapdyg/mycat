@@ -2,7 +2,7 @@
 
 ## Team
 
- -[Dyhdalovych Ostap]
+ Dyhdalovych Ostap
  
 ## Prerequisites
 
@@ -29,10 +29,12 @@ The rest prerequisites (such as development libraries) can be found in the [pack
 
 ## Usage
 
-```bash
-add [a] [b]
+```console
+> ./mycat --help
+Usage: mycat [-h|--help] [-A] <file1> <file2> ... <fileN>
+Concatenate file(s) to standart input.
+-A            show invisible non-whitespace characters as their hexidecimal codes \xAB
+-h, --help      show this message and exit
 ```
 
-If less than two numbers provided, zeroes are used instead. If more - an error occurs.
 
-Help flags `-h`/`--help` support is available.
