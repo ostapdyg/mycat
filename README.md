@@ -2,8 +2,8 @@
 
 ## Team
 
- - [Volodymyr Chernetskyi](https://github.com/chernetskyi)
-
+ -[Dyhdalovych Ostap]
+ 
 ## Prerequisites
 
  - **C++ compiler** - needs to support **C++17** standard
@@ -12,7 +12,7 @@
 The rest prerequisites (such as development libraries) can be found in the [packages file](./apt_packages.txt) in the form of the apt package manager package names.
 
 ## Installing
-
+<!-- 
 1. Clone the project.
     ```bash
     git clone git@github.com:chernetskyi/cpp-template.git
@@ -25,7 +25,7 @@ The rest prerequisites (such as development libraries) can be found in the [pack
     ```bash
     cmake -G"Unix Makefiles" -Bbuild
     cmake --build build
-    ```
+    ``` -->
 
 ## Usage
 
